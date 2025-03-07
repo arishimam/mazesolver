@@ -21,7 +21,7 @@ def main():
     # c3.draw(100, 100, 150, 150)
     # c2.draw_move(c3, False)
 
-    maze = Maze(50, 50, 10, 10, 50, 50, window)  
+    maze = Maze(50, 50, 14, 10, 50, 50, window)  
     maze.create_cells()
 
 

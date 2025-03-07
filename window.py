@@ -45,7 +45,7 @@ class Line():
         )
 
 class Cell():
-    def __init__(self, window):
+    def __init__(self, window = None):
         self.has_left_wall = True
         self.has_right_wall = True
         self.has_top_wall = True
@@ -59,7 +59,9 @@ class Cell():
         self.win = window
 
     def draw(self, x1, y1, x2, y2):
-        # if self.win == None: return???
+        if self.win == None: 
+            return
+
         # draw up to 4 lines 
         self.x1 = x1
         self.y1 = y1
@@ -80,6 +82,8 @@ class Cell():
             self.win.draw_line(l1, "black")
 
     def draw_move(self, to_cell, undo=False):
+        if self.win == None: 
+            return
         # draw line to each cells center
         # we likely don't have to worry about legality of the move if we only 
         # perform this action on adjacent cells
