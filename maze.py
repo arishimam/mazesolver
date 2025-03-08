@@ -31,6 +31,7 @@ class Maze():
         self.break_entrance_and_exit()
         self.break_walls_r(0,0)
         self.reset_cells_visited()
+        self.dfs_solve_r(0,0)
 
     def create_cells(self):
         for i in range(self.num_cols):
@@ -136,3 +137,64 @@ class Maze():
         for i in range(self.num_cols):
             for j in range(self.num_rows):
                 self.cells[i][j].visited = False 
+
+    def dfs_solve_r(self, i, j):
+
+        self.animate()
+
+        self.cells[i][j].visited = True
+
+        if i == self.num_cols-1 and j == self.num_rows-1:
+            return True
+
+
+        # check left
+        if i > 0 and not self.cells[i][j].has_left_wall:
+            if not self.cells[i-1][j].visited:
+
+                self.cells[i][j].draw_move(self.cells[i-1][j])
+
+                if self.dfs_solve_r(i-1,j):
+                    return True
+
+                self.cells[i][j].draw_move(self.cells[i-1][j], True)
+                
+
+
+
+        # check right
+        if i+1 < self.num_cols and not self.cells[i][j].has_right_wall:
+            if not self.cells[i+1][j].visited:
+                self.cells[i][j].draw_move(self.cells[i+1][j])
+
+                if self.dfs_solve_r(i+1,j):
+                    return True
+
+                self.cells[i][j].draw_move(self.cells[i+1][j], True)
+
+        # check top
+        if j > 0 and not self.cells[i][j].has_top_wall:
+            if not self.cells[i][j-1].visited:
+
+                self.cells[i][j].draw_move(self.cells[i][j-1])
+
+                if self.dfs_solve_r(i,j-1):
+                    return True
+
+                self.cells[i][j].draw_move(self.cells[i][j-1], True)
+
+        # check bottom
+        if j+1 < self.num_rows and not self.cells[i][j].has_bottom_wall:
+            if not self.cells[i][j+1].visited:
+
+                self.cells[i][j].draw_move(self.cells[i][j+1])
+
+                if self.dfs_solve_r(i,j+1):
+                    return True
+
+                self.cells[i][j].draw_move(self.cells[i][j+1], True)
+
+
+        return False
+
+
