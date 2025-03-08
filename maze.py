@@ -32,17 +32,17 @@ class Maze():
         self.break_walls_r(0,0)
 
     def create_cells(self):
-        for i in range(self.num_rows):
+        for i in range(self.num_cols):
             col = []
-            for j in range (self.num_cols):
+            for j in range (self.num_rows):
                 c = Cell(self.win)
                 col.append(c) 
             self.cells.append(col)
 
 
         # call draw_cells on cells 
-        for i in range(self.num_rows):
-            for j in range (self.num_cols):
+        for i in range(self.num_cols):
+            for j in range (self.num_rows):
                 self.draw_cell(i,j)
 
     def draw_cell(self, i, j):
@@ -60,7 +60,7 @@ class Maze():
         self.cells[0][0].has_top_wall = False
         self.draw_cell(0,0)
 
-        self.cells[ self.num_rows - 1 ][ self.num_cols - 1 ].has_bottom_wall = False
+        self.cells[ self.num_cols - 1 ][ self.num_rows - 1 ].has_bottom_wall = False
         self.draw_cell( len(self.cells)-1 , len(self.cells[0])-1 )
 
     def break_walls_r(self, i, j):
@@ -72,20 +72,20 @@ class Maze():
             # check adjacent cells if visited
             # if not visited append to possible directions
 
-            # top
+            # left 
             if i > 0 and not self.cells[i-1][j].visited:
                 remaining.append( (i-1,j) )
 
-            # left
+            # above 
             if j > 0 and not self.cells[i][j-1].visited:
                 remaining.append( (i,j-1) )
 
-            # bottom
-            if i + 1 < self.num_rows and not self.cells[i+1][j].visited:
+            # right 
+            if i + 1 < self.num_cols and not self.cells[i+1][j].visited:
                 remaining.append( (i+1,j) )
 
-            # right
-            if j + 1 < self.num_cols and not self.cells[i][j+1].visited:
+            # below 
+            if j + 1 < self.num_rows and not self.cells[i][j+1].visited:
                 remaining.append( (i,j+1) )
 
 
@@ -95,29 +95,30 @@ class Maze():
 
             # pick random direction
             r_direction = random.randrange(len(remaining))
-            index = remaining[r_direction]
+            index = remaining.pop(r_direction)
+            #index = remaining[r_direction]
             
             # knock downwalls between the cells
             if index[0] < i:
                 #new cell above
-                self.cells[i][j].has_top_wall = False
-                self.cells[i-1][j].has_bottom_wall = False
+                self.cells[i][j].has_left_wall = False
+                self.cells[i-1][j].has_right_wall = False
 
             
             if index[0] > i:
                 #new cell below 
-                self.cells[i][j].has_bottom_wall = False
-                self.cells[i+1][j].has_top_wall = False
+                self.cells[i][j].has_right_wall = False
+                self.cells[i+1][j].has_left_wall = False
 
             if index[1] > j:
                 #new cell right 
-                self.cells[i][j].has_right_wall = False
-                self.cells[i][j+1].has_left_wall = False
+                self.cells[i][j].has_bottom_wall = False
+                self.cells[i][j+1].has_top_wall = False
 
             if index[1] < j:
                 #new cell left 
-                self.cells[i][j].has_left_wall = False
-                self.cells[i][j-1].has_right_wall = False
+                self.cells[i][j].has_top_wall = False
+                self.cells[i][j-1].has_bottom_wall = False
 
             # recursive call to new cell
             self.break_walls_r(index[0], index[1])
