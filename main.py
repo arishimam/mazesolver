@@ -1,4 +1,4 @@
-from window import Window, Point, Line, Cell
+from window import Window, Point, Line 
 from maze import Maze
 
 
@@ -23,6 +23,7 @@ def main():
 
     maze = Maze(50, 50, 14, 10, 50, 50, window)  
     maze.create_cells()
+    maze.break_entrance_and_exit()
 
 
     window.wait_for_close()
