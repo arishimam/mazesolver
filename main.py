@@ -1,5 +1,6 @@
 from window import Window, Point, Line 
 from maze import Maze
+import sys
 
 
 def main():
@@ -11,9 +12,11 @@ def main():
     cell_size_x = (screen_x - margin * 2) // num_cols
     cell_size_y = (screen_y - margin * 2) // num_rows
 
-    win = Window(screen_x, screen_y)
+    sys.setrecursionlimit(10000)
 
+    win = Window(screen_x, screen_y)
     maze = Maze(margin, margin, num_rows, num_cols, cell_size_x, cell_size_y, win)  
+
 
 
     win.wait_for_close()
