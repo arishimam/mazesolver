@@ -31,7 +31,8 @@ class Maze():
         self.break_entrance_and_exit()
         self.break_walls_r(0,0)
         self.reset_cells_visited()
-        self.dfs_solve_r(0,0)
+        #self.dfs_solve_r(0,0)
+        self.bfs_solve(0,0)
 
     def create_cells(self):
         for i in range(self.num_cols):
@@ -126,12 +127,12 @@ class Maze():
             self.break_walls_r(index[0], index[1])
 
 
-    def animate(self):
+    def animate(self, sleep_time = 0.01):
         if self.win == None:
             return
 
         self.win.redraw()
-        time.sleep(0.01)
+        time.sleep(sleep_time)
 
     def reset_cells_visited(self):
         for i in range(self.num_cols):
@@ -158,9 +159,6 @@ class Maze():
                     return True
 
                 self.cells[i][j].draw_move(self.cells[i-1][j], True)
-                
-
-
 
         # check right
         if i+1 < self.num_cols and not self.cells[i][j].has_right_wall:
@@ -196,5 +194,60 @@ class Maze():
 
 
         return False
+
+    def bfs_solve(self, l, m):
+
+        q = [ (l,m) ]
+
+        while len(q) > 0:
+
+            self.animate(0.1)
+            currLen = len(q)
+
+            for k in range(currLen):
+                c = q[0]
+                q = q[1:]
+
+                i = c[0]
+                j = c[1]
+
+                # mark visited 
+                self.cells[i][j].visited = True
+
+                # how to draw???
+
+                # check if goal
+                if i == self.num_cols-1 and j == self.num_rows-1:
+                    return True
+
+                # explore neighbors
+                # left
+                if i > 0 and not self.cells[i][j].has_left_wall:
+                    if not self.cells[i-1][j].visited:
+                        q.append( (i-1,j ))
+
+                        self.cells[i][j].draw_move(self.cells[i-1][j])
+                # right
+                if i+1 < self.num_cols and not self.cells[i][j].has_right_wall:
+                    if not self.cells[i+1][j].visited:
+                        q.append( (i+1,j) )
+                        self.cells[i][j].draw_move(self.cells[i+1][j])
+                # top 
+                if j > 0 and not self.cells[i][j].has_top_wall:
+                    if not self.cells[i][j-1].visited:
+                        q.append( (i,j-1) )
+                        self.cells[i][j].draw_move(self.cells[i][j-1])
+                # bottom
+                if j+1 < self.num_cols and not self.cells[i][j].has_bottom_wall:
+                    if not self.cells[i][j+1].visited:
+                        q.append( (i,j+1) )
+                        self.cells[i][j].draw_move(self.cells[i][j+1])
+            
+        return False
+
+
+
+
+
 
 
